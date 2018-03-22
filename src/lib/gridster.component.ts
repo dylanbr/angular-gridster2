@@ -447,7 +447,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   pixelsToPositionY(y: number, roundingMethod: Function, noLimit?: boolean): number {
-    const position = roundingMethod(y / this.curRowHeight);
+    const position = Math.max(roundingMethod(y / (this.curRowHeight + this.$options.margin) ), 0);
     if (noLimit) {
       return position;
     } else {
