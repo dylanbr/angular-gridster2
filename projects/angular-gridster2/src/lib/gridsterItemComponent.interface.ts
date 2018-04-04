@@ -19,6 +19,7 @@ export abstract class GridsterItemComponentInterface {
   setSize: () => void;
   checkItemChanges: (newValue: GridsterItem, oldValue: GridsterItem) => void;
   canBeDragged: () => boolean;
+  dragLimit: () => boolean | string;
   canBeResized: () => boolean;
   el: any;
   gridster: GridsterComponentInterface;
