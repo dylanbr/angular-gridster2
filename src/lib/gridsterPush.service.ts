@@ -174,6 +174,8 @@ export class GridsterPush {
     if (!this.gridster.$options.pushDirections.south) {
       return false;
     }
+    let dragLimit = gridsterItemCollide.dragLimit();
+	if(dragLimit && dragLimit == "x") return false;
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
     if (this.push(gridsterItemCollide, this.fromNorth)) {
@@ -190,6 +192,8 @@ export class GridsterPush {
     if (!this.gridster.$options.pushDirections.north) {
       return false;
     }
+    let dragLimit = gridsterItemCollide.dragLimit();
+	if(dragLimit && dragLimit == "x") return false;
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
     if (this.push(gridsterItemCollide, this.fromSouth)) {
@@ -206,6 +210,8 @@ export class GridsterPush {
     if (!this.gridster.$options.pushDirections.east) {
       return false;
     }
+    let dragLimit = gridsterItemCollide.dragLimit();
+	if(dragLimit && dragLimit == "y") return false;
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
     if (this.push(gridsterItemCollide, this.fromWest)) {
@@ -222,6 +228,8 @@ export class GridsterPush {
     if (!this.gridster.$options.pushDirections.west) {
       return false;
     }
+    let dragLimit = gridsterItemCollide.dragLimit();
+	if(dragLimit && dragLimit == "y") return false;
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
     if (this.push(gridsterItemCollide, this.fromEast)) {

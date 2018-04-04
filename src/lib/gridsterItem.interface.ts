@@ -7,6 +7,7 @@ export interface GridsterItem {
   cols?: number;
   initCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   dragEnabled?: boolean;
+  dragLimit?: string;
   resizeEnabled?: boolean;
   compactEnabled?: boolean;
   maxItemRows?: number;

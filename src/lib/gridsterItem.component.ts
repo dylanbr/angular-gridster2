@@ -53,6 +53,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       x: undefined,
       y: undefined,
       dragEnabled: undefined,
+	  dragLimit: undefined,
       resizeEnabled: undefined,
       compactEnabled: undefined,
       maxItemRows: undefined,
@@ -137,6 +138,12 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   canBeDragged(): boolean {
     return !this.gridster.mobile &&
       (this.$item.dragEnabled === undefined ? this.gridster.$options.draggable.enabled : this.$item.dragEnabled);
+  }
+
+  dragLimit(): boolean | string {
+	  if(this.$item.dragLimit === undefined) return false;
+	  if(this.$item.dragLimit === "x" || this.$item.dragLimit === "y") return this.$item.dragLimit;
+	  return false;
   }
 
   canBeResized(): boolean {
