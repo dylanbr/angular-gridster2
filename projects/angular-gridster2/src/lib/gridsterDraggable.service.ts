@@ -44,6 +44,7 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
   collision: GridsterItemComponentInterface | boolean;
+  scrollIntoView: any;
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
@@ -53,6 +54,13 @@ export class GridsterDraggable {
       clientY: 0
     };
     this.path = [];
+    this.scrollIntoView = this.debounce(() => {
+		this.gridsterItem.el.scrollIntoView({
+			behavior: "auto",
+			block: "nearest",
+			inline: "nearest"
+		});
+	},50);
   }
 
   destroy(): void {
@@ -137,6 +145,7 @@ export class GridsterDraggable {
     this.zone.run(() => {
       this.gridster.updateGrid();
     });
+	this.scrollIntoView();
   }
 
   dragStop(e: any): void {
@@ -214,7 +223,17 @@ export class GridsterDraggable {
     const transform = 'translate(' + this.left + 'px, ' + this.top + 'px)';
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
 
-    if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
+    let limit = this.gridsterItem.dragLimit();
+	let allow = true;
+    if(limit) {
+		if(limit === "x" && this.path[0].y !== this.gridsterItem.$item.y) allow = false;
+		if(limit === "y" && this.path[0].x !== this.gridsterItem.$item.x) allow = false;
+	}
+	
+	if(!allow) {
+        this.gridsterItem.$item.x = this.positionXBackup;
+        this.gridsterItem.$item.y = this.positionYBackup;
+	} else if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];
       let direction = '';
       if (lastPosition.x < this.gridsterItem.$item.x) {
@@ -295,4 +314,19 @@ export class GridsterDraggable {
       cancelTouchCancel();
     }
   }
+
+  debounce(func, wait, immediate?) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
 }
