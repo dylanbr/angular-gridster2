@@ -334,8 +334,8 @@ export class GridsterDraggable {
     }
   }
 
-  debounce(func, wait, immediate?) {
-    var timeout;
+  debounce(func: any, wait: number, immediate?: boolean) {
+    let timeout: any;
     return function() {
       var context = this, args = arguments;
       var later = function() {
