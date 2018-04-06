@@ -2,9 +2,9 @@
   "name": "angular-gridster2",
   "version": "5.2.0",
   "license": "MIT",
-  "main": "dist/index.js",
-  "jsnext:main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "src/lib/index.js",
+  "jsnext:main": "src/lib/index.js",
+  "module": "src/lib/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -43,7 +43,7 @@
     "Tiberiu Zuld"
   ],
   "files": [
-    "dist/*"
+    "src/lib/*"
   ],
   "dependencies": {},
   "devDependencies": {
