@@ -39,7 +39,7 @@
     "Tiberiu Zuld"
   ],
   "files": [
-    "dist/*"
+    "src/lib/*"
   ],
   "dependencies": {},
   "devDependencies": {
