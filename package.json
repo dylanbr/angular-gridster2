@@ -39,7 +39,7 @@
     "Tiberiu Zuld"
   ],
   "files": [
-    "dist/*"
+    "src/lib/*"
   ],
   "dependencies": {
     "@angular/common": "^6.0.0",
