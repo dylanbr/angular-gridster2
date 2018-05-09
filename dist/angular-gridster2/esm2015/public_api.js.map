@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "public_api.js",
+  "sources": [
+    "ng://angular-gridster2/projects/angular-gridster2/src/public_api.ts"
+  ],
+  "sourcesContent": [
+    "/*\n * Public API Surface of gridster\n */\n\nexport {GridsterComponent} from './lib/gridster.component';\nexport {GridsterItemComponent} from './lib/gridsterItem.component';\nexport {GridsterItem} from './lib/gridsterItem.interface';\nexport {GridsterItemComponentInterface} from './lib/gridsterItemComponent.interface';\nexport {GridsterComponentInterface} from './lib/gridster.interface';\nexport {GridsterConfig, GridType, DisplayGrid, CompactType, Draggable, Resizable, PushDirections} from './lib/gridsterConfig.interface';\nexport {GridsterConfigService} from './lib/gridsterConfig.constant';\nexport {GridsterModule} from './lib/gridster.module';\nexport {GridsterPush} from './lib/gridsterPush.service';\nexport {GridsterPushResize} from './lib/gridsterPushResize.service';\nexport {GridsterSwap} from './lib/gridsterSwap.service';\n"
+  ],
+  "names": [],
+  "mappings": ";;;;;;;AAIA,OAAO,EAAC,iBAAiB,EAAC,MAAM,0BAA0B,CAAC;AAC3D,OAAO,EAAC,qBAAqB,EAAC,MAAM,8BAA8B,CAAC;AAEnE,OAAO,EAAC,8BAA8B,EAAC,MAAM,uCAAuC,CAAC;AACrF,OAAO,EAAC,0BAA0B,EAAC,MAAM,0BAA0B,CAAC;AACpE,OAAO,EAAiB,QAAQ,EAAE,WAAW,EAAE,WAAW,EAAuC,MAAM,gCAAgC,CAAC;AACxI,OAAO,EAAC,qBAAqB,EAAC,MAAM,+BAA+B,CAAC;AACpE,OAAO,EAAC,cAAc,EAAC,MAAM,uBAAuB,CAAC;AACrD,OAAO,EAAC,YAAY,EAAC,MAAM,4BAA4B,CAAC;AACxD,OAAO,EAAC,kBAAkB,EAAC,MAAM,kCAAkC,CAAC;AACpE,OAAO,EAAC,YAAY,EAAC,MAAM,4BAA4B,CAAC"
+}

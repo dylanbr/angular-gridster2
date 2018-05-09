@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "gridster.interface.js",
+  "sources": [
+    "ng://angular-gridster2/projects/angular-gridster2/src/lib/gridster.interface.ts"
+  ],
+  "sourcesContent": [
+    "import {GridsterConfigS} from './gridsterConfigS.interface';\nimport {ChangeDetectorRef, NgZone, Renderer2} from '@angular/core';\nimport {GridsterEmptyCell} from './gridsterEmptyCell.service';\nimport {GridsterCompact} from './gridsterCompact.service';\nimport {GridsterConfig} from './gridsterConfig.interface';\nimport {GridsterItem} from './gridsterItem.interface';\nimport {GridsterItemComponentInterface} from './gridsterItemComponent.interface';\nimport {GridsterRenderer} from './gridsterRenderer.service';\n\nexport abstract class GridsterComponentInterface {\n  $options: GridsterConfigS;\n  grid: Array<GridsterItemComponentInterface>;\n  checkCollision: (item: GridsterItem) => GridsterItemComponentInterface | boolean;\n  positionXToPixels: (x: number) => number;\n  pixelsToPositionX: (x: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;\n  positionYToPixels: (y: number) => number;\n  pixelsToPositionY: (y: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;\n  findItemWithItem: (item: GridsterItem) => GridsterItemComponentInterface | boolean;\n  findItemsWithItem: (item: GridsterItem) => Array<GridsterItemComponentInterface>;\n  checkGridCollision: (item: GridsterItem) => boolean;\n  el: any;\n  renderer: Renderer2;\n  gridRenderer: GridsterRenderer;\n  cdRef: ChangeDetectorRef;\n  options: GridsterConfig;\n  calculateLayoutDebounce: () => void;\n  updateGrid: () => void;\n  movingItem: GridsterItem | null;\n  addItem: (item: GridsterItemComponentInterface) => void;\n  removeItem: (item: GridsterItemComponentInterface) => void;\n  previewStyle: (drag?: boolean) => void;\n  mobile: boolean;\n  curWidth: number;\n  curHeight: number;\n  columns: number;\n  rows: number;\n  curColWidth: number;\n  curRowHeight: number;\n  windowResize: (() => void) | null;\n  setGridDimensions: (() => void);\n  dragInProgress: boolean;\n  emptyCell: GridsterEmptyCell;\n  compact: GridsterCompact;\n  zone: NgZone;\n  gridRows: Array<number>;\n  gridColumns: Array<number>;\n}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;;;;AASA,MAAM;CAqCL"
+}

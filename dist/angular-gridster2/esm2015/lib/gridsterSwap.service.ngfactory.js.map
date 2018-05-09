@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "gridsterSwap.service.ngfactory.js",
+  "sourceRoot": "",
+  "sources": [
+    "ng://angular-gridster2/projects/angular-gridster2/src/lib/gridsterSwap.service.ngfactory.ts"
+  ],
+  "names": [],
+  "mappings": "",
+  "sourcesContent": [
+    "import * as i0 from '@angular/core';\ni0.ComponentFactory;\n"
+  ]
+}

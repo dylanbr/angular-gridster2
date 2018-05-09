@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "gridster.module.js",
+  "sources": [
+    "ng://angular-gridster2/projects/angular-gridster2/src/lib/gridster.module.ts"
+  ],
+  "sourcesContent": [
+    "import {CommonModule} from '@angular/common';\nimport {NgModule} from '@angular/core';\n\nimport {GridsterComponent} from './gridster.component';\nimport {GridsterItemComponent} from './gridsterItem.component';\nimport {GridsterPreviewComponent} from './gridsterPreview.component';\n\n@NgModule({\n  declarations: [\n    GridsterComponent,\n    GridsterItemComponent,\n    GridsterPreviewComponent\n  ],\n  imports: [\n    CommonModule\n  ],\n  exports: [GridsterComponent, GridsterItemComponent],\n  providers: [],\n  bootstrap: []\n})\nexport class GridsterModule {\n}\n"
+  ],
+  "names": [],
+  "mappings": ";;;;AAAA,OAAO,EAAC,YAAY,EAAC,MAAM,iBAAiB,CAAC;AAC7C,OAAO,EAAC,QAAQ,EAAC,MAAM,eAAe,CAAC;AAEvC,OAAO,EAAC,iBAAiB,EAAC,MAAM,sBAAsB,CAAC;AACvD,OAAO,EAAC,qBAAqB,EAAC,MAAM,0BAA0B,CAAC;AAC/D,OAAO,EAAC,wBAAwB,EAAC,MAAM,6BAA6B,CAAC;AAerE,MAAM;;;YAbL,QAAQ,SAAC;gBACR,YAAY,EAAE;oBACZ,iBAAiB;oBACjB,qBAAqB;oBACrB,wBAAwB;iBACzB;gBACD,OAAO,EAAE;oBACP,YAAY;iBACb;gBACD,OAAO,EAAE,CAAC,iBAAiB,EAAE,qBAAqB,CAAC;gBACnD,SAAS,EAAE,EAAE;gBACb,SAAS,EAAE,EAAE;aACd"
+}
