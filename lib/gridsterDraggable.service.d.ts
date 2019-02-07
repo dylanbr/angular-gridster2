@@ -30,6 +30,7 @@ export declare class GridsterDraggable {
     dragStopFunction: (event: any) => void;
     mousemove: Function;
     mouseup: Function;
+    mouseleave: Function;
     cancelOnBlur: Function;
     touchmove: Function;
     touchend: Function;

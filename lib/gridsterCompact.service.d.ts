@@ -9,5 +9,7 @@ export declare class GridsterCompact {
     checkCompactUp(): void;
     moveUpTillCollision(item: GridsterItem): boolean;
     checkCompactLeft(): void;
+    checkCompactRight(): void;
     moveLeftTillCollision(item: GridsterItem): boolean;
+    moveRightTillCollision(item: any): boolean;
 }

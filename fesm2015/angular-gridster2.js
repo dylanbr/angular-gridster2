@@ -1,9 +1,9 @@
-import { Injectable, ChangeDetectorRef, Component, ElementRef, Input, NgZone, Renderer2, ViewEncapsulation, Host, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Injectable, ChangeDetectorRef, Component, ElementRef, Input, NgZone, Renderer2, ViewEncapsulation, Host, NgModule } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @enum {string} */
 const GridType = {
@@ -27,13 +27,17 @@ const CompactType = {
     CompactLeft: 'compactLeft',
     CompactUpAndLeft: 'compactUp&Left',
     CompactLeftAndUp: 'compactLeft&Up',
+    CompactRight: 'compactRight',
+    CompactUpAndRight: 'compactUp&Right',
+    CompactRightAndUp: 'compactRight&Up',
 };
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-const /** @type {?} */ GridsterConfigService = {
+/** @type {?} */
+const GridsterConfigService = {
     gridType: GridType.Fit,
     // 'fit' will fit the items in the container without scroll;
     // 'scrollVertical' will fit on width and height of the items will be the same as the width
@@ -91,6 +95,8 @@ const /** @type {?} */ GridsterConfigService = {
     // override outer margin for grid
     outerMarginLeft: null,
     // override outer margin for grid
+    useTransformPositioning: true,
+    // toggle between transform or top/left positioning of items
     scrollSensitivity: 10,
     // margin of the dashboard where to start scrolling
     scrollSpeed: 20,
@@ -158,6 +164,7 @@ const /** @type {?} */ GridsterConfigService = {
         dropOverItems: false,
         // enable drop items on top other item
         dropOverItemsCallback: undefined // callback on drop over another item
+        // Arguments: source, target, gridComponent
     },
     resizable: {
         delayStart: 0,
@@ -178,6 +185,7 @@ const /** @type {?} */ GridsterConfigService = {
         stop: undefined,
         // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
         start: undefined // callback when resizing an item starts.
+        // Arguments: item, gridsterItem, event
     },
     swap: true,
     // allow items to switch position if drop on top of another
@@ -204,7 +212,7 @@ const /** @type {?} */ GridsterConfigService = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterUtils {
     /**
@@ -214,7 +222,7 @@ class GridsterUtils {
      * @return {?}
      */
     static merge(obj1, obj2, properties) {
-        for (const /** @type {?} */ p in obj2) {
+        for (const p in obj2) {
             if (obj2[p] !== void 0 && properties.hasOwnProperty(p)) {
                 if (typeof obj2[p] === 'object') {
                     obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
@@ -232,10 +240,15 @@ class GridsterUtils {
      * @return {?}
      */
     static debounce(func, wait) {
-        let /** @type {?} */ timeout;
+        /** @type {?} */
+        let timeout;
         return function () {
-            const /** @type {?} */ context = this, /** @type {?} */ args = arguments;
-            const /** @type {?} */ later = function () {
+            /** @type {?} */
+            const context = this;
+            /** @type {?} */
+            const args = arguments;
+            /** @type {?} */
+            const later = function () {
                 timeout = null;
                 func.apply(context, args);
             };
@@ -324,12 +337,12 @@ class GridsterUtils {
     }
 }
 GridsterUtils.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @abstract
@@ -339,7 +352,7 @@ class GridsterComponentInterface {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterEmptyCell {
     /**
@@ -422,7 +435,8 @@ class GridsterEmptyCell {
         if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
             return;
         }
-        const /** @type {?} */ item = this.getValidItemFromEvent(e);
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e);
         if (!item) {
             return;
         }
@@ -441,7 +455,8 @@ class GridsterEmptyCell {
         }
         e.preventDefault();
         e.stopPropagation();
-        const /** @type {?} */ item = this.getValidItemFromEvent(e);
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e);
         if (!item) {
             return;
         }
@@ -455,7 +470,8 @@ class GridsterEmptyCell {
      * @return {?}
      */
     emptyCellDragDrop(e) {
-        const /** @type {?} */ item = this.getValidItemFromEvent(e);
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e);
         if (!item) {
             return;
         }
@@ -471,7 +487,8 @@ class GridsterEmptyCell {
     emptyCellDragOver(e) {
         e.preventDefault();
         e.stopPropagation();
-        const /** @type {?} */ item = this.getValidItemFromEvent(e);
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e);
         if (item) {
             e.dataTransfer.dropEffect = 'move';
             this.gridster.movingItem = item;
@@ -492,8 +509,11 @@ class GridsterEmptyCell {
         }
         e.preventDefault();
         e.stopPropagation();
-        const /** @type {?} */ item = this.getValidItemFromEvent(e);
-        if (!item) {
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e);
+        /** @type {?} */
+        const leftMouseButtonCode = 1;
+        if (!item || e.buttons !== leftMouseButtonCode) {
             return;
         }
         this.initialItem = item;
@@ -513,7 +533,8 @@ class GridsterEmptyCell {
     emptyCellMouseMove(e) {
         e.preventDefault();
         e.stopPropagation();
-        const /** @type {?} */ item = this.getValidItemFromEvent(e, this.initialItem);
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e, this.initialItem);
         if (!item) {
             return;
         }
@@ -529,7 +550,8 @@ class GridsterEmptyCell {
         this.emptyCellMMoveTouch();
         this.emptyCellUp();
         this.emptyCellUpTouch();
-        const /** @type {?} */ item = this.getValidItemFromEvent(e, this.initialItem);
+        /** @type {?} */
+        const item = this.getValidItemFromEvent(e, this.initialItem);
         if (item) {
             this.gridster.movingItem = item;
         }
@@ -554,10 +576,14 @@ class GridsterEmptyCell {
         e.preventDefault();
         e.stopPropagation();
         GridsterUtils.checkTouchEvent(e);
-        const /** @type {?} */ rect = this.gridster.el.getBoundingClientRect();
-        const /** @type {?} */ x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.$options.margin;
-        const /** @type {?} */ y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.$options.margin;
-        const /** @type {?} */ item = {
+        /** @type {?} */
+        const rect = this.gridster.el.getBoundingClientRect();
+        /** @type {?} */
+        const x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.$options.margin;
+        /** @type {?} */
+        const y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.$options.margin;
+        /** @type {?} */
+        const item = {
             x: this.gridster.pixelsToPositionX(x, Math.floor, true),
             y: this.gridster.pixelsToPositionY(y, Math.floor, true),
             cols: this.gridster.$options.defaultItemCols,
@@ -586,16 +612,16 @@ class GridsterEmptyCell {
     }
 }
 GridsterEmptyCell.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterEmptyCell.ctorParameters = () => [
-    { type: GridsterComponentInterface, },
+    { type: GridsterComponentInterface }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterCompact {
     /**
@@ -629,6 +655,17 @@ class GridsterCompact {
                 this.checkCompactLeft();
                 this.checkCompactUp();
             }
+            else if (this.gridster.$options.compactType === CompactType.CompactRight) {
+                this.checkCompactRight();
+            }
+            else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+                this.checkCompactUp();
+                this.checkCompactRight();
+            }
+            else if (this.gridster.$options.compactType === CompactType.CompactRightAndUp) {
+                this.checkCompactRight();
+                this.checkCompactUp();
+            }
         }
     }
     /**
@@ -651,15 +688,25 @@ class GridsterCompact {
                 this.moveLeftTillCollision(item);
                 this.moveUpTillCollision(item);
             }
+            else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+                this.moveUpTillCollision(item);
+                this.moveRightTillCollision(item);
+            }
         }
     }
     /**
      * @return {?}
      */
     checkCompactUp() {
-        let /** @type {?} */ widgetMovedUp = false, /** @type {?} */ widget, /** @type {?} */ moved;
-        const /** @type {?} */ l = this.gridster.grid.length;
-        for (let /** @type {?} */ i = 0; i < l; i++) {
+        /** @type {?} */
+        let widgetMovedUp = false;
+        /** @type {?} */
+        let widget;
+        /** @type {?} */
+        let moved;
+        /** @type {?} */
+        const l = this.gridster.grid.length;
+        for (let i = 0; i < l; i++) {
             widget = this.gridster.grid[i];
             if (widget.$item.compactEnabled === false) {
                 continue;
@@ -694,14 +741,48 @@ class GridsterCompact {
      * @return {?}
      */
     checkCompactLeft() {
-        let /** @type {?} */ widgetMovedUp = false, /** @type {?} */ widget, /** @type {?} */ moved;
-        const /** @type {?} */ l = this.gridster.grid.length;
-        for (let /** @type {?} */ i = 0; i < l; i++) {
+        /** @type {?} */
+        let widgetMovedUp = false;
+        /** @type {?} */
+        let widget;
+        /** @type {?} */
+        let moved;
+        /** @type {?} */
+        const l = this.gridster.grid.length;
+        for (let i = 0; i < l; i++) {
             widget = this.gridster.grid[i];
             if (widget.$item.compactEnabled === false) {
                 continue;
             }
             moved = this.moveLeftTillCollision(widget.$item);
+            if (moved) {
+                widgetMovedUp = true;
+                widget.item.x = widget.$item.x;
+                widget.itemChanged();
+            }
+        }
+        if (widgetMovedUp) {
+            this.checkCompact();
+        }
+    }
+    /**
+     * @return {?}
+     */
+    checkCompactRight() {
+        /** @type {?} */
+        let widgetMovedUp = false;
+        /** @type {?} */
+        let widget;
+        /** @type {?} */
+        let moved;
+        /** @type {?} */
+        const l = this.gridster.grid.length;
+        for (let i = 0; i < l; i++) {
+            widget = this.gridster.grid[i];
+            if (widget.$item.compactEnabled === false) {
+                continue;
+            }
+            moved = this.moveRightTillCollision(widget.$item);
             if (moved) {
                 widgetMovedUp = true;
                 widget.item.x = widget.$item.x;
@@ -727,18 +808,33 @@ class GridsterCompact {
             return true;
         }
     }
+    /**
+     * @param {?} item
+     * @return {?}
+     */
+    moveRightTillCollision(item) {
+        item.x += 1;
+        if (this.gridster.checkCollision(item)) {
+            item.x -= 1;
+            return false;
+        }
+        else {
+            this.moveRightTillCollision(item);
+            return true;
+        }
+    }
 }
 GridsterCompact.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterCompact.ctorParameters = () => [
-    { type: GridsterComponentInterface, },
+    { type: GridsterComponentInterface }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterRenderer {
     /**
@@ -761,22 +857,39 @@ class GridsterRenderer {
      */
     updateItem(el, item, renderer) {
         if (this.gridster.mobile) {
-            renderer.setStyle(el, 'transform', '');
-            renderer.setStyle(el, 'width', '');
-            renderer.setStyle(el, 'height', '');
+            this.clearCellPosition(renderer, el);
+            if (this.gridster.$options.keepFixedHeightInMobile) {
+                renderer.setStyle(el, 'height', (item.rows * this.gridster.$options.fixedRowHeight) + 'px');
+            }
+            else {
+                renderer.setStyle(el, 'height', (this.gridster.curWidth / 2 * item.rows) + 'px');
+            }
+            if (this.gridster.$options.keepFixedWidthInMobile) {
+                renderer.setStyle(el, 'width', this.gridster.$options.fixedColWidth + 'px');
+            }
+            else {
+                renderer.setStyle(el, 'width', '');
+            }
             renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
+            renderer.setStyle(el, 'margin-right', '');
         }
         else {
-            const /** @type {?} */ x = Math.round(this.gridster.curColWidth * item.x);
-            const /** @type {?} */ y = Math.round(this.gridster.curRowHeight * item.y);
-            const /** @type {?} */ width = this.gridster.curColWidth * item.cols - this.gridster.$options.margin;
-            const /** @type {?} */ height = (this.gridster.curRowHeight * item.rows - this.gridster.$options.margin);
-            const /** @type {?} */ transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-            renderer.setStyle(el, 'transform', transform);
+            /** @type {?} */
+            const x = Math.round(this.gridster.curColWidth * item.x);
+            /** @type {?} */
+            const y = Math.round(this.gridster.curRowHeight * item.y);
+            /** @type {?} */
+            const width = this.gridster.curColWidth * item.cols - this.gridster.$options.margin;
+            /** @type {?} */
+            const height = (this.gridster.curRowHeight * item.rows - this.gridster.$options.margin);
+            // set the cell style
+            this.setCellPosition(renderer, el, x, y);
             renderer.setStyle(el, 'width', width + 'px');
             renderer.setStyle(el, 'height', height + 'px');
-            let /** @type {?} */ marginBottom = null;
-            let /** @type {?} */ marginRight = null;
+            /** @type {?} */
+            let marginBottom = null;
+            /** @type {?} */
+            let marginRight = null;
             if (this.gridster.$options.outerMargin) {
                 if (this.gridster.rows === item.rows + item.y) {
                     if (this.gridster.$options.outerMarginBottom !== null) {
@@ -803,10 +916,14 @@ class GridsterRenderer {
      * @return {?}
      */
     updateGridster() {
-        let /** @type {?} */ addClass = '';
-        let /** @type {?} */ removeClass1 = '';
-        let /** @type {?} */ removeClass2 = '';
-        let /** @type {?} */ removeClass3 = '';
+        /** @type {?} */
+        let addClass = '';
+        /** @type {?} */
+        let removeClass1 = '';
+        /** @type {?} */
+        let removeClass2 = '';
+        /** @type {?} */
+        let removeClass3 = '';
         if (this.gridster.$options.gridType === GridType.Fit) {
             addClass = GridType.Fit;
             removeClass1 = GridType.ScrollVertical;
@@ -868,35 +985,123 @@ class GridsterRenderer {
      * @return {?}
      */
     getGridColumnStyle(i) {
-        return {
-            transform: 'translateX(' + this.gridster.curColWidth * i + 'px)',
-            width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
-            height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
-        };
+        return Object.assign({}, this.getLeftPosition(this.gridster.curColWidth * i), { width: this.gridster.curColWidth - this.gridster.$options.margin + 'px', height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin + 'px' });
     }
     /**
      * @param {?} i
      * @return {?}
      */
     getGridRowStyle(i) {
-        return {
-            transform: 'translateY(' + this.gridster.curRowHeight * i + 'px)',
-            width: this.gridster.gridColumns.length * this.gridster.curColWidth - this.gridster.$options.margin + 'px',
-            height: this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
-        };
+        return Object.assign({}, this.getTopPosition(this.gridster.curRowHeight * i), { width: this.gridster.gridColumns.length * this.gridster.curColWidth - this.gridster.$options.margin + 'px', height: this.gridster.curRowHeight - this.gridster.$options.margin + 'px' });
+    }
+    /**
+     * @param {?} d
+     * @return {?}
+     */
+    getLeftPosition(d) {
+        if (this.gridster.$options.useTransformPositioning) {
+            return {
+                transform: 'translateX(' + d + 'px)',
+            };
+        }
+        else {
+            return {
+                left: (this.getLeftMargin() + d) + 'px'
+            };
+        }
+    }
+    /**
+     * @param {?} d
+     * @return {?}
+     */
+    getTopPosition(d) {
+        if (this.gridster.$options.useTransformPositioning) {
+            return {
+                transform: 'translateY(' + d + 'px)',
+            };
+        }
+        else {
+            return {
+                top: this.getTopMargin() + d + 'px'
+            };
+        }
+    }
+    /**
+     * @param {?} renderer
+     * @param {?} el
+     * @return {?}
+     */
+    clearCellPosition(renderer, el) {
+        if (this.gridster.$options.useTransformPositioning) {
+            renderer.setStyle(el, 'transform', '');
+        }
+        else {
+            renderer.setStyle(el, 'top', '');
+            renderer.setStyle(el, 'left', '');
+        }
+    }
+    /**
+     * @param {?} renderer
+     * @param {?} el
+     * @param {?} x
+     * @param {?} y
+     * @return {?}
+     */
+    setCellPosition(renderer, el, x, y) {
+        if (this.gridster.$options.useTransformPositioning) {
+            /** @type {?} */
+            const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+            renderer.setStyle(el, 'transform', transform);
+        }
+        else {
+            renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
+            renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+        }
+    }
+    /**
+     * @return {?}
+     */
+    getLeftMargin() {
+        if (this.gridster.$options.outerMargin) {
+            if (this.gridster.$options.outerMarginLeft !== null) {
+                return this.gridster.$options.outerMarginLeft;
+            }
+            else {
+                return this.gridster.$options.margin;
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+    /**
+     * @return {?}
+     */
+    getTopMargin() {
+        if (this.gridster.$options.outerMargin) {
+            if (this.gridster.$options.outerMarginTop !== null) {
+                return this.gridster.$options.outerMarginTop;
+            }
+            else {
+                return this.gridster.$options.margin;
+            }
+        }
+        else {
+            return 0;
+        }
     }
 }
 GridsterRenderer.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterRenderer.ctorParameters = () => [
-    { type: GridsterComponentInterface, },
+    { type: GridsterComponentInterface }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterComponent {
     /**
@@ -949,7 +1154,7 @@ class GridsterComponent {
      * @return {?}
      */
     ngOnChanges(changes) {
-        if (changes["options"]) {
+        if (changes.options) {
             this.setOptions();
             this.options.api = {
                 optionsChanged: this.optionsChanged.bind(this),
@@ -968,8 +1173,10 @@ class GridsterComponent {
      * @return {?}
      */
     resize() {
-        let /** @type {?} */ height;
-        let /** @type {?} */ width;
+        /** @type {?} */
+        let height;
+        /** @type {?} */
+        let width;
         if (this.$options.gridType === 'fit' && !this.mobile) {
             width = this.el.offsetWidth;
             height = this.el.offsetHeight;
@@ -1001,7 +1208,10 @@ class GridsterComponent {
      */
     optionsChanged() {
         this.setOptions();
-        let /** @type {?} */ widgetsIndex = this.grid.length - 1, /** @type {?} */ widget;
+        /** @type {?} */
+        let widgetsIndex = this.grid.length - 1;
+        /** @type {?} */
+        let widget;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             widget.updateOptions();
@@ -1040,15 +1250,23 @@ class GridsterComponent {
      * @return {?}
      */
     checkIfToResize() {
-        const /** @type {?} */ clientWidth = this.el.clientWidth;
-        const /** @type {?} */ offsetWidth = this.el.offsetWidth;
-        const /** @type {?} */ scrollWidth = this.el.scrollWidth;
-        const /** @type {?} */ clientHeight = this.el.clientHeight;
-        const /** @type {?} */ offsetHeight = this.el.offsetHeight;
-        const /** @type {?} */ scrollHeight = this.el.scrollHeight;
-        const /** @type {?} */ verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight
+        /** @type {?} */
+        const clientWidth = this.el.clientWidth;
+        /** @type {?} */
+        const offsetWidth = this.el.offsetWidth;
+        /** @type {?} */
+        const scrollWidth = this.el.scrollWidth;
+        /** @type {?} */
+        const clientHeight = this.el.clientHeight;
+        /** @type {?} */
+        const offsetHeight = this.el.offsetHeight;
+        /** @type {?} */
+        const scrollHeight = this.el.scrollHeight;
+        /** @type {?} */
+        const verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight
             && scrollHeight - offsetHeight < offsetWidth - clientWidth;
-        const /** @type {?} */ horizontalScrollPresent = clientHeight < offsetHeight
+        /** @type {?} */
+        const horizontalScrollPresent = clientHeight < offsetHeight
             && scrollWidth > offsetWidth && scrollWidth - offsetWidth < offsetHeight - clientHeight;
         if (verticalScrollPresent) {
             return false;
@@ -1059,15 +1277,19 @@ class GridsterComponent {
      * @return {?}
      */
     setGridSize() {
-        let /** @type {?} */ width = this.el.clientWidth;
-        let /** @type {?} */ height = this.el.clientHeight;
+        /** @type {?} */
+        const el = this.el;
+        /** @type {?} */
+        let width = el.clientWidth;
+        /** @type {?} */
+        let height = el.clientHeight;
         if (this.$options.setGridSize || this.$options.gridType === 'fit' && !this.mobile) {
-            width = this.el.offsetWidth;
-            height = this.el.offsetHeight;
+            width = el.offsetWidth;
+            height = el.offsetHeight;
         }
         else {
-            width = this.el.clientWidth;
-            height = this.el.clientHeight;
+            width = el.clientWidth;
+            height = el.clientHeight;
         }
         this.curWidth = width;
         this.curHeight = height;
@@ -1085,8 +1307,14 @@ class GridsterComponent {
             this.mobile = !this.mobile;
             this.renderer.removeClass(this.el, 'mobile');
         }
-        let /** @type {?} */ rows = this.$options.minRows, /** @type {?} */ columns = this.$options.minCols;
-        let /** @type {?} */ widgetsIndex = this.grid.length - 1, /** @type {?} */ widget;
+        /** @type {?} */
+        let rows = this.$options.minRows;
+        /** @type {?} */
+        let columns = this.$options.minCols;
+        /** @type {?} */
+        let widgetsIndex = this.grid.length - 1;
+        /** @type {?} */
+        let widget;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             if (!widget.notPlaced) {
@@ -1111,7 +1339,8 @@ class GridsterComponent {
         }
         this.setGridDimensions();
         if (this.$options.outerMargin) {
-            let /** @type {?} */ marginWidth = -this.$options.margin;
+            /** @type {?} */
+            let marginWidth = -this.$options.margin;
             if (this.$options.outerMarginLeft !== null) {
                 marginWidth += this.$options.outerMarginLeft;
                 this.renderer.setStyle(this.el, 'padding-left', this.$options.outerMarginLeft + 'px');
@@ -1129,7 +1358,8 @@ class GridsterComponent {
                 this.renderer.setStyle(this.el, 'padding-right', this.$options.margin + 'px');
             }
             this.curColWidth = (this.curWidth - marginWidth) / this.columns;
-            let /** @type {?} */ marginHeight = -this.$options.margin;
+            /** @type {?} */
+            let marginHeight = -this.$options.margin;
             if (this.$options.outerMarginTop !== null) {
                 marginHeight += this.$options.outerMarginTop;
                 this.renderer.setStyle(this.el, 'padding-top', this.$options.outerMarginTop + 'px');
@@ -1166,7 +1396,10 @@ class GridsterComponent {
             this.renderer.setStyle(this.el, 'width', '');
             this.renderer.setStyle(this.el, 'height', '');
         }
-        let /** @type {?} */ widgetsIndex = this.grid.length - 1, /** @type {?} */ widget;
+        /** @type {?} */
+        let widgetsIndex = this.grid.length - 1;
+        /** @type {?} */
+        let widget;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             widget.setSize();
@@ -1243,7 +1476,8 @@ class GridsterComponent {
      * @return {?}
      */
     checkCollision(item) {
-        let /** @type {?} */ collision = false;
+        /** @type {?} */
+        let collision = false;
         if (this.options.itemValidateCallback) {
             collision = !this.options.itemValidateCallback(item);
         }
@@ -1251,7 +1485,8 @@ class GridsterComponent {
             collision = true;
         }
         if (!collision) {
-            const /** @type {?} */ c = this.findItemWithItem(item);
+            /** @type {?} */
+            const c = this.findItemWithItem(item);
             if (c) {
                 collision = c;
             }
@@ -1263,20 +1498,34 @@ class GridsterComponent {
      * @return {?}
      */
     checkGridCollision(item) {
-        const /** @type {?} */ noNegativePosition = item.y > -1 && item.x > -1;
-        const /** @type {?} */ maxGridCols = item.cols + item.x <= this.$options.maxCols;
-        const /** @type {?} */ maxGridRows = item.rows + item.y <= this.$options.maxRows;
-        const /** @type {?} */ maxItemCols = item.maxItemCols === undefined ? this.$options.maxItemCols : item.maxItemCols;
-        const /** @type {?} */ minItemCols = item.minItemCols === undefined ? this.$options.minItemCols : item.minItemCols;
-        const /** @type {?} */ maxItemRows = item.maxItemRows === undefined ? this.$options.maxItemRows : item.maxItemRows;
-        const /** @type {?} */ minItemRows = item.minItemRows === undefined ? this.$options.minItemRows : item.minItemRows;
-        const /** @type {?} */ inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
-        const /** @type {?} */ inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
-        const /** @type {?} */ minAreaLimit = item.minItemArea === undefined ? this.$options.minItemArea : item.minItemArea;
-        const /** @type {?} */ maxAreaLimit = item.maxItemArea === undefined ? this.$options.maxItemArea : item.maxItemArea;
-        const /** @type {?} */ area = item.cols * item.rows;
-        const /** @type {?} */ inMinArea = minAreaLimit <= area;
-        const /** @type {?} */ inMaxArea = maxAreaLimit >= area;
+        /** @type {?} */
+        const noNegativePosition = item.y > -1 && item.x > -1;
+        /** @type {?} */
+        const maxGridCols = item.cols + item.x <= this.$options.maxCols;
+        /** @type {?} */
+        const maxGridRows = item.rows + item.y <= this.$options.maxRows;
+        /** @type {?} */
+        const maxItemCols = item.maxItemCols === undefined ? this.$options.maxItemCols : item.maxItemCols;
+        /** @type {?} */
+        const minItemCols = item.minItemCols === undefined ? this.$options.minItemCols : item.minItemCols;
+        /** @type {?} */
+        const maxItemRows = item.maxItemRows === undefined ? this.$options.maxItemRows : item.maxItemRows;
+        /** @type {?} */
+        const minItemRows = item.minItemRows === undefined ? this.$options.minItemRows : item.minItemRows;
+        /** @type {?} */
+        const inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
+        /** @type {?} */
+        const inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
+        /** @type {?} */
+        const minAreaLimit = item.minItemArea === undefined ? this.$options.minItemArea : item.minItemArea;
+        /** @type {?} */
+        const maxAreaLimit = item.maxItemArea === undefined ? this.$options.maxItemArea : item.maxItemArea;
+        /** @type {?} */
+        const area = item.cols * item.rows;
+        /** @type {?} */
+        const inMinArea = minAreaLimit <= area;
+        /** @type {?} */
+        const inMaxArea = maxAreaLimit >= area;
         return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
     }
     /**
@@ -1284,7 +1533,10 @@ class GridsterComponent {
      * @return {?}
      */
     findItemWithItem(item) {
-        let /** @type {?} */ widgetsIndex = this.grid.length - 1, /** @type {?} */ widget;
+        /** @type {?} */
+        let widgetsIndex = this.grid.length - 1;
+        /** @type {?} */
+        let widget;
         for (; widgetsIndex > -1; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
@@ -1298,8 +1550,12 @@ class GridsterComponent {
      * @return {?}
      */
     findItemsWithItem(item) {
-        const /** @type {?} */ a = [];
-        let /** @type {?} */ widgetsIndex = this.grid.length - 1, /** @type {?} */ widget;
+        /** @type {?} */
+        const a = [];
+        /** @type {?} */
+        let widgetsIndex = this.grid.length - 1;
+        /** @type {?} */
+        let widget;
         for (; widgetsIndex > -1; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
@@ -1340,7 +1596,10 @@ class GridsterComponent {
             newItem.rows = this.$options.defaultItemRows;
         }
         this.setGridDimensions();
-        let /** @type {?} */ rowsIndex = startingFrom.y || 0, /** @type {?} */ colsIndex;
+        /** @type {?} */
+        let rowsIndex = startingFrom.y || 0;
+        /** @type {?} */
+        let colsIndex;
         for (; rowsIndex < this.rows; rowsIndex++) {
             newItem.y = rowsIndex;
             colsIndex = startingFrom.x || 0;
@@ -1351,9 +1610,12 @@ class GridsterComponent {
                 }
             }
         }
-        const /** @type {?} */ canAddToRows = this.$options.maxRows >= this.rows + newItem.rows;
-        const /** @type {?} */ canAddToColumns = this.$options.maxCols >= this.columns + newItem.cols;
-        const /** @type {?} */ addToRows = this.rows <= this.columns && canAddToRows;
+        /** @type {?} */
+        const canAddToRows = this.$options.maxRows >= this.rows + newItem.rows;
+        /** @type {?} */
+        const canAddToColumns = this.$options.maxCols >= this.columns + newItem.cols;
+        /** @type {?} */
+        const addToRows = this.rows <= this.columns && canAddToRows;
         if (!addToRows && canAddToColumns) {
             newItem.x = this.columns;
             newItem.y = 0;
@@ -1371,7 +1633,8 @@ class GridsterComponent {
      * @return {?}
      */
     getFirstPossiblePosition(item) {
-        const /** @type {?} */ tmpItem = Object.assign({}, item);
+        /** @type {?} */
+        const tmpItem = Object.assign({}, item);
         this.getNextPossiblePosition(tmpItem);
         return tmpItem;
     }
@@ -1380,9 +1643,11 @@ class GridsterComponent {
      * @return {?}
      */
     getLastPossiblePosition(item) {
-        let /** @type {?} */ farthestItem = { y: 0, x: 0 };
+        /** @type {?} */
+        let farthestItem = { y: 0, x: 0 };
         farthestItem = this.grid.reduce((prev, curr) => {
-            const /** @type {?} */ currCoords = { y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1 };
+            /** @type {?} */
+            const currCoords = { y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1 };
             if (GridsterUtils.compareItems(prev, currCoords) === 1) {
                 return currCoords;
             }
@@ -1390,7 +1655,8 @@ class GridsterComponent {
                 return prev;
             }
         }, farthestItem);
-        const /** @type {?} */ tmpItem = Object.assign({}, item);
+        /** @type {?} */
+        const tmpItem = Object.assign({}, item);
         this.getNextPossiblePosition(tmpItem, farthestItem);
         return tmpItem;
     }
@@ -1401,7 +1667,8 @@ class GridsterComponent {
      * @return {?}
      */
     pixelsToPositionX(x, roundingMethod, noLimit) {
-        const /** @type {?} */ position = roundingMethod(x / this.curColWidth);
+        /** @type {?} */
+        const position = roundingMethod(x / this.curColWidth);
         if (noLimit) {
             return position;
         }
@@ -1416,7 +1683,8 @@ class GridsterComponent {
      * @return {?}
      */
     pixelsToPositionY(y, roundingMethod, noLimit) {
-        const /** @type {?} */ position = roundingMethod(y / this.curRowHeight);
+        /** @type {?} */
+        const position = roundingMethod(y / this.curRowHeight);
         if (noLimit) {
             return position;
         }
@@ -1442,31 +1710,25 @@ class GridsterComponent {
 GridsterComponent.decorators = [
     { type: Component, args: [{
                 selector: 'gridster',
-                template: `<div class="gridster-column" *ngFor="let column of gridColumns; let i = index;"
-     [ngStyle]="gridRenderer.getGridColumnStyle(i)"></div>
-<div class="gridster-row" *ngFor="let row of gridRows; let i = index;"
-     [ngStyle]="gridRenderer.getGridRowStyle(i)"></div>
-<ng-content></ng-content>
-<gridster-preview class="gridster-preview"></gridster-preview>
-`,
-                styles: [`gridster{position:relative;box-sizing:border-box;background:grey;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:block}gridster.fit{overflow-x:hidden;overflow-y:hidden}gridster.scrollVertical{overflow-x:hidden;overflow-y:auto}gridster.scrollHorizontal{overflow-x:auto;overflow-y:hidden}gridster.fixed{overflow:auto}gridster.mobile{overflow-x:hidden;overflow-y:auto}gridster.mobile gridster-item{position:relative;height:25%}gridster .gridster-column,gridster .gridster-row{position:absolute;display:none;transition:.3s;box-sizing:border-box}gridster.display-grid .gridster-column,gridster.display-grid .gridster-row{display:block}gridster .gridster-column{border-left:1px solid #fff;border-right:1px solid #fff}gridster .gridster-row{border-top:1px solid #fff;border-bottom:1px solid #fff}`],
-                encapsulation: ViewEncapsulation.None
-            },] },
+                template: "<div class=\"gridster-column\" *ngFor=\"let column of gridColumns; let i = index;\"\n     [ngStyle]=\"gridRenderer.getGridColumnStyle(i)\"></div>\n<div class=\"gridster-row\" *ngFor=\"let row of gridRows; let i = index;\"\n     [ngStyle]=\"gridRenderer.getGridRowStyle(i)\"></div>\n<ng-content></ng-content>\n<gridster-preview class=\"gridster-preview\"></gridster-preview>\n",
+                encapsulation: ViewEncapsulation.None,
+                styles: ["gridster{position:relative;box-sizing:border-box;background:grey;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:block}gridster.fit{overflow-x:hidden;overflow-y:hidden}gridster.scrollVertical{overflow-x:hidden;overflow-y:auto}gridster.scrollHorizontal{overflow-x:auto;overflow-y:hidden}gridster.fixed{overflow:auto}gridster.mobile{overflow-x:hidden;overflow-y:auto}gridster.mobile gridster-item{position:relative}gridster .gridster-column,gridster .gridster-row{position:absolute;display:none;transition:.3s;box-sizing:border-box}gridster.display-grid .gridster-column,gridster.display-grid .gridster-row{display:block}gridster .gridster-column{border-left:1px solid #fff;border-right:1px solid #fff}gridster .gridster-row{border-top:1px solid #fff;border-bottom:1px solid #fff}"]
+            }] }
 ];
 /** @nocollapse */
 GridsterComponent.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: Renderer2, },
-    { type: ChangeDetectorRef, },
-    { type: NgZone, },
+    { type: ElementRef },
+    { type: Renderer2 },
+    { type: ChangeDetectorRef },
+    { type: NgZone }
 ];
 GridsterComponent.propDecorators = {
-    "options": [{ type: Input },],
+    options: [{ type: Input }]
 };
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @abstract
@@ -1476,7 +1738,7 @@ class GridsterItemComponentInterface {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterSwap {
     /**
@@ -1508,8 +1770,10 @@ class GridsterSwap {
      */
     checkSwapBack() {
         if (this.swapedItem) {
-            const /** @type {?} */ x = this.swapedItem.$item.x;
-            const /** @type {?} */ y = this.swapedItem.$item.y;
+            /** @type {?} */
+            const x = this.swapedItem.$item.x;
+            /** @type {?} */
+            const y = this.swapedItem.$item.y;
             this.swapedItem.$item.x = this.swapedItem.item.x || 0;
             this.swapedItem.$item.y = this.swapedItem.item.y || 0;
             if (this.gridster.checkCollision(this.swapedItem.$item)) {
@@ -1549,13 +1813,19 @@ class GridsterSwap {
      * @return {?}
      */
     checkSwap(pushedBy) {
-        const /** @type {?} */ gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
+        /** @type {?} */
+        const gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
-            const /** @type {?} */ gridsterItemCollide = gridsterItemCollision;
-            const /** @type {?} */ copyCollisionX = gridsterItemCollide.$item.x;
-            const /** @type {?} */ copyCollisionY = gridsterItemCollide.$item.y;
-            const /** @type {?} */ copyX = pushedBy.$item.x;
-            const /** @type {?} */ copyY = pushedBy.$item.y;
+            /** @type {?} */
+            const gridsterItemCollide = gridsterItemCollision;
+            /** @type {?} */
+            const copyCollisionX = gridsterItemCollide.$item.x;
+            /** @type {?} */
+            const copyCollisionY = gridsterItemCollide.$item.y;
+            /** @type {?} */
+            const copyX = pushedBy.$item.x;
+            /** @type {?} */
+            const copyY = pushedBy.$item.y;
             gridsterItemCollide.$item.x = pushedBy.item.x || 0;
             gridsterItemCollide.$item.y = pushedBy.item.y || 0;
             pushedBy.$item.x = gridsterItemCollide.item.x || 0;
@@ -1574,27 +1844,37 @@ class GridsterSwap {
     }
 }
 GridsterSwap.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterSwap.ctorParameters = () => [
-    { type: GridsterItemComponentInterface, },
+    { type: GridsterItemComponentInterface }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-let /** @type {?} */ scrollSensitivity;
-let /** @type {?} */ scrollSpeed;
-const /** @type {?} */ intervalDuration = 50;
-let /** @type {?} */ gridsterElement;
-let /** @type {?} */ resizeEvent;
-let /** @type {?} */ resizeEventType;
-let /** @type {?} */ intervalE;
-let /** @type {?} */ intervalW;
-let /** @type {?} */ intervalN;
-let /** @type {?} */ intervalS;
+/** @type {?} */
+let scrollSensitivity;
+/** @type {?} */
+let scrollSpeed;
+/** @type {?} */
+const intervalDuration = 50;
+/** @type {?} */
+let gridsterElement;
+/** @type {?} */
+let resizeEvent;
+/** @type {?} */
+let resizeEventType;
+/** @type {?} */
+let intervalE;
+/** @type {?} */
+let intervalW;
+/** @type {?} */
+let intervalN;
+/** @type {?} */
+let intervalS;
 /**
  * @param {?} gridster
  * @param {?} left
@@ -1614,12 +1894,18 @@ function scroll(gridster, left, top, width, height, e, lastMouse, calculateItemP
     gridsterElement = gridster.el;
     resizeEvent = resize;
     resizeEventType = resizeEventScrollType;
-    const /** @type {?} */ offsetWidth = gridsterElement.offsetWidth;
-    const /** @type {?} */ offsetHeight = gridsterElement.offsetHeight;
-    const /** @type {?} */ offsetLeft = gridsterElement.scrollLeft;
-    const /** @type {?} */ offsetTop = gridsterElement.scrollTop;
-    const /** @type {?} */ elemTopOffset = top - offsetTop;
-    const /** @type {?} */ elemBottomOffset = offsetHeight + offsetTop - top - height;
+    /** @type {?} */
+    const offsetWidth = gridsterElement.offsetWidth;
+    /** @type {?} */
+    const offsetHeight = gridsterElement.offsetHeight;
+    /** @type {?} */
+    const offsetLeft = gridsterElement.scrollLeft;
+    /** @type {?} */
+    const offsetTop = gridsterElement.scrollTop;
+    /** @type {?} */
+    const elemTopOffset = top - offsetTop;
+    /** @type {?} */
+    const elemBottomOffset = offsetHeight + offsetTop - top - height;
     if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
         cancelN();
         if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
@@ -1637,8 +1923,10 @@ function scroll(gridster, left, top, width, height, e, lastMouse, calculateItemP
     else if (lastMouse.clientY !== e.clientY) {
         cancelVertical();
     }
-    const /** @type {?} */ elemRightOffset = offsetLeft + offsetWidth - left - width;
-    const /** @type {?} */ elemLeftOffset = left - offsetLeft;
+    /** @type {?} */
+    const elemRightOffset = offsetLeft + offsetWidth - left - width;
+    /** @type {?} */
+    const elemLeftOffset = left - offsetLeft;
     if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
         cancelW();
         if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
@@ -1664,7 +1952,8 @@ function scroll(gridster, left, top, width, height, e, lastMouse, calculateItemP
  * @return {?}
  */
 function startVertical(sign, calculateItemPosition, lastMouse) {
-    let /** @type {?} */ clientY = lastMouse.clientY;
+    /** @type {?} */
+    let clientY = lastMouse.clientY;
     return setInterval(() => {
         if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
             cancelVertical();
@@ -1681,7 +1970,8 @@ function startVertical(sign, calculateItemPosition, lastMouse) {
  * @return {?}
  */
 function startHorizontal(sign, calculateItemPosition, lastMouse) {
-    let /** @type {?} */ clientX = lastMouse.clientX;
+    /** @type {?} */
+    let clientX = lastMouse.clientX;
     return setInterval(() => {
         if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {
             cancelHorizontal();
@@ -1752,7 +2042,7 @@ function cancelN() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterPush {
     /**
@@ -1791,7 +2081,8 @@ class GridsterPush {
     pushItems(direction, disable) {
         if (this.gridster.$options.pushItems && !disable) {
             this.pushedItemsOrder = [];
-            const /** @type {?} */ pushed = this.push(this.gridsterItem, direction);
+            /** @type {?} */
+            const pushed = this.push(this.gridsterItem, direction);
             if (!pushed) {
                 this.restoreTempItems();
             }
@@ -1808,7 +2099,8 @@ class GridsterPush {
      * @return {?}
      */
     restoreTempItems() {
-        let /** @type {?} */ i = this.pushedItemsTemp.length - 1;
+        /** @type {?} */
+        let i = this.pushedItemsTemp.length - 1;
         for (; i > -1; i--) {
             this.removeFromTempPushed(this.pushedItemsTemp[i]);
         }
@@ -1817,9 +2109,12 @@ class GridsterPush {
      * @return {?}
      */
     restoreItems() {
-        let /** @type {?} */ i = 0;
-        const /** @type {?} */ l = this.pushedItems.length;
-        let /** @type {?} */ pushedItem;
+        /** @type {?} */
+        let i = 0;
+        /** @type {?} */
+        const l = this.pushedItems.length;
+        /** @type {?} */
+        let pushedItem;
         for (; i < l; i++) {
             pushedItem = this.pushedItems[i];
             pushedItem.$item.x = pushedItem.item.x || 0;
@@ -1833,9 +2128,12 @@ class GridsterPush {
      * @return {?}
      */
     setPushedItems() {
-        let /** @type {?} */ i = 0;
-        const /** @type {?} */ l = this.pushedItems.length;
-        let /** @type {?} */ pushedItem;
+        /** @type {?} */
+        let i = 0;
+        /** @type {?} */
+        const l = this.pushedItems.length;
+        /** @type {?} */
+        let pushedItem;
         for (; i < l; i++) {
             pushedItem = this.pushedItems[i];
             pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
@@ -1847,8 +2145,10 @@ class GridsterPush {
      * @return {?}
      */
     checkPushBack() {
-        let /** @type {?} */ i = this.pushedItems.length - 1;
-        let /** @type {?} */ change = false;
+        /** @type {?} */
+        let i = this.pushedItems.length - 1;
+        /** @type {?} */
+        let change = false;
         for (; i > -1; i--) {
             if (this.checkPushedItem(this.pushedItems[i], i)) {
                 change = true;
@@ -1859,6 +2159,7 @@ class GridsterPush {
         }
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @param {?} direction
      * @return {?}
@@ -1870,10 +2171,16 @@ class GridsterPush {
         if (direction === '') {
             return false;
         }
-        const /** @type {?} */ a = this.gridster.findItemsWithItem(gridsterItem.$item);
-        let /** @type {?} */ i = a.length - 1, /** @type {?} */ itemCollision;
-        let /** @type {?} */ makePush = true;
-        const /** @type {?} */ b = [];
+        /** @type {?} */
+        const a = this.gridster.findItemsWithItem(gridsterItem.$item);
+        /** @type {?} */
+        let i = a.length - 1;
+        /** @type {?} */
+        let itemCollision;
+        /** @type {?} */
+        let makePush = true;
+        /** @type {?} */
+        const b = [];
         for (; i > -1; i--) {
             itemCollision = a[i];
             if (itemCollision === this.gridsterItem) {
@@ -1884,7 +2191,8 @@ class GridsterPush {
                 makePush = false;
                 break;
             }
-            const /** @type {?} */ compare = this.pushedItemsTemp.find((el) => {
+            /** @type {?} */
+            const compare = this.pushedItemsTemp.find((el) => {
                 return el.$item.x === itemCollision.$item.x && el.$item.y === itemCollision.$item.y;
             });
             if (compare) {
@@ -1915,7 +2223,8 @@ class GridsterPush {
         if (!makePush) {
             i = this.pushedItemsOrder.lastIndexOf(b[0]);
             if (i > -1) {
-                let /** @type {?} */ j = this.pushedItemsOrder.length - 1;
+                /** @type {?} */
+                let j = this.pushedItemsOrder.length - 1;
                 for (; j >= i; j--) {
                     itemCollision = this.pushedItemsOrder[j];
                     this.pushedItemsOrder.pop();
@@ -1927,6 +2236,7 @@ class GridsterPush {
         return makePush;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @return {?}
@@ -1935,7 +2245,8 @@ class GridsterPush {
         if (!this.gridster.$options.pushDirections.south) {
             return false;
         }
-        let /** @type {?} */ dragLimit = gridsterItemCollide.dragLimit();
+        /** @type {?} */
+        let dragLimit = gridsterItemCollide.dragLimit();
         if (dragLimit && dragLimit == "x")
             return false;
         this.addToTempPushed(gridsterItemCollide);
@@ -1951,6 +2262,7 @@ class GridsterPush {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @return {?}
@@ -1959,7 +2271,8 @@ class GridsterPush {
         if (!this.gridster.$options.pushDirections.north) {
             return false;
         }
-        let /** @type {?} */ dragLimit = gridsterItemCollide.dragLimit();
+        /** @type {?} */
+        let dragLimit = gridsterItemCollide.dragLimit();
         if (dragLimit && dragLimit == "x")
             return false;
         this.addToTempPushed(gridsterItemCollide);
@@ -1975,6 +2288,7 @@ class GridsterPush {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @return {?}
@@ -1983,7 +2297,8 @@ class GridsterPush {
         if (!this.gridster.$options.pushDirections.east) {
             return false;
         }
-        let /** @type {?} */ dragLimit = gridsterItemCollide.dragLimit();
+        /** @type {?} */
+        let dragLimit = gridsterItemCollide.dragLimit();
         if (dragLimit && dragLimit == "y")
             return false;
         this.addToTempPushed(gridsterItemCollide);
@@ -1999,6 +2314,7 @@ class GridsterPush {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @return {?}
@@ -2007,7 +2323,8 @@ class GridsterPush {
         if (!this.gridster.$options.pushDirections.west) {
             return false;
         }
-        let /** @type {?} */ dragLimit = gridsterItemCollide.dragLimit();
+        /** @type {?} */
+        let dragLimit = gridsterItemCollide.dragLimit();
         if (dragLimit && dragLimit == "y")
             return false;
         this.addToTempPushed(gridsterItemCollide);
@@ -2023,11 +2340,13 @@ class GridsterPush {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @return {?}
      */
     addToTempPushed(gridsterItem) {
-        let /** @type {?} */ i = this.pushedItemsTemp.indexOf(gridsterItem);
+        /** @type {?} */
+        let i = this.pushedItemsTemp.indexOf(gridsterItem);
         if (i === -1) {
             i = this.pushedItemsTemp.push(gridsterItem) - 1;
             this.pushedItemsTempPath[i] = [];
@@ -2035,12 +2354,15 @@ class GridsterPush {
         this.pushedItemsTempPath[i].push({ x: gridsterItem.$item.x, y: gridsterItem.$item.y });
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @return {?}
      */
     removeFromTempPushed(gridsterItem) {
-        const /** @type {?} */ i = this.pushedItemsTemp.indexOf(gridsterItem);
-        const /** @type {?} */ tempPosition = this.pushedItemsTempPath[i].pop();
+        /** @type {?} */
+        const i = this.pushedItemsTemp.indexOf(gridsterItem);
+        /** @type {?} */
+        const tempPosition = this.pushedItemsTempPath[i].pop();
         if (!tempPosition) {
             return;
         }
@@ -2053,6 +2375,7 @@ class GridsterPush {
         }
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @return {?}
      */
@@ -2063,11 +2386,13 @@ class GridsterPush {
                 { x: gridsterItem.$item.x, y: gridsterItem.$item.y }]);
         }
         else {
-            const /** @type {?} */ i = this.pushedItems.indexOf(gridsterItem);
+            /** @type {?} */
+            const i = this.pushedItems.indexOf(gridsterItem);
             this.pushedItemsPath[i].push({ x: gridsterItem.$item.x, y: gridsterItem.$item.y });
         }
     }
     /**
+     * @private
      * @param {?} i
      * @return {?}
      */
@@ -2078,11 +2403,13 @@ class GridsterPush {
         }
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @return {?}
      */
     removeFromPushedItem(gridsterItem) {
-        const /** @type {?} */ i = this.pushedItems.indexOf(gridsterItem);
+        /** @type {?} */
+        const i = this.pushedItems.indexOf(gridsterItem);
         if (i > -1) {
             this.pushedItemsPath[i].pop();
             if (!this.pushedItemsPath.length) {
@@ -2092,15 +2419,24 @@ class GridsterPush {
         }
     }
     /**
+     * @private
      * @param {?} pushedItem
      * @param {?} i
      * @return {?}
      */
     checkPushedItem(pushedItem, i) {
-        const /** @type {?} */ path = this.pushedItemsPath[i];
-        let /** @type {?} */ j = path.length - 2;
-        let /** @type {?} */ lastPosition, /** @type {?} */ x, /** @type {?} */ y;
-        let /** @type {?} */ change = false;
+        /** @type {?} */
+        const path = this.pushedItemsPath[i];
+        /** @type {?} */
+        let j = path.length - 2;
+        /** @type {?} */
+        let lastPosition;
+        /** @type {?} */
+        let x;
+        /** @type {?} */
+        let y;
+        /** @type {?} */
+        let change = false;
         for (; j > -1; j--) {
             lastPosition = path[j];
             x = pushedItem.$item.x;
@@ -2124,16 +2460,16 @@ class GridsterPush {
     }
 }
 GridsterPush.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterPush.ctorParameters = () => [
-    { type: GridsterItemComponentInterface, },
+    { type: GridsterItemComponentInterface }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterDraggable {
     /**
@@ -2143,6 +2479,7 @@ class GridsterDraggable {
      */
     constructor(gridsterItem, gridster, zone) {
         this.zone = zone;
+        this.collision = false;
         this.gridsterItem = gridsterItem;
         this.gridster = gridster;
         this.lastMouse = {
@@ -2162,7 +2499,6 @@ class GridsterDraggable {
      * @return {?}
      */
     destroy() {
-        delete this.gridster.movingItem;
         if (this.gridster.previewStyle) {
             this.gridster.previewStyle(true);
         }
@@ -2200,6 +2536,7 @@ class GridsterDraggable {
             this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
         });
         this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
+        this.mouseleave = this.gridsterItem.renderer.listen('document', 'mouseleave', this.dragStopFunction);
         this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
         this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
         this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
@@ -2260,6 +2597,7 @@ class GridsterDraggable {
         this.cancelOnBlur();
         this.mousemove();
         this.mouseup();
+        this.mouseleave();
         this.touchmove();
         this.touchend();
         this.touchcancel();
@@ -2288,12 +2626,20 @@ class GridsterDraggable {
         this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
         this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
         this.gridsterItem.setSize();
-        this.push.restoreItems();
-        this.swap.restoreSwapItem();
-        this.push.destroy();
-        delete this.push;
-        this.swap.destroy();
-        delete this.swap;
+        if (this.push) {
+            this.push.restoreItems();
+        }
+        if (this.swap) {
+            this.swap.restoreSwapItem();
+        }
+        if (this.push) {
+            this.push.destroy();
+            delete this.push;
+        }
+        if (this.swap) {
+            this.swap.destroy();
+            delete this.swap;
+        }
     }
     /**
      * @return {?}
@@ -2301,18 +2647,26 @@ class GridsterDraggable {
     makeDrag() {
         if (this.gridster.$options.draggable.dropOverItems && this.gridster.options.draggable
             && this.gridster.options.draggable.dropOverItemsCallback
-            && this.collision !== true && this.collision !== false && this.collision.$item) {
+            && this.collision && this.collision !== true && this.collision.$item) {
             this.gridster.options.draggable.dropOverItemsCallback(this.gridsterItem.item, this.collision.item, this.gridster);
         }
-        delete this.collision;
+        this.collision = false;
         this.gridsterItem.setSize();
         this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
-        this.push.setPushedItems();
-        this.swap.setSwapItem();
-        this.push.destroy();
-        delete this.push;
-        this.swap.destroy();
-        delete this.swap;
+        if (this.push) {
+            this.push.setPushedItems();
+        }
+        if (this.swap) {
+            this.swap.setSwapItem();
+        }
+        if (this.push) {
+            this.push.destroy();
+            delete this.push;
+        }
+        if (this.swap) {
+            this.swap.destroy();
+            delete this.swap;
+        }
     }
     /**
      * @return {?}
@@ -2331,10 +2685,11 @@ class GridsterDraggable {
         if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
             this.gridsterItem.$item.y = this.positionYBackup;
         }
-        const /** @type {?} */ transform = 'translate(' + this.left + 'px, ' + this.top + 'px)';
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
-        let /** @type {?} */ limit = this.gridsterItem.dragLimit();
-        let /** @type {?} */ allow = true;
+        this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, this.top);
+        /** @type {?} */
+        let limit = this.gridsterItem.dragLimit();
+        /** @type {?} */
+        let allow = true;
         if (limit) {
             if (limit === "x" && this.path[0].y !== this.gridsterItem.$item.y)
                 allow = false;
@@ -2346,8 +2701,10 @@ class GridsterDraggable {
             this.gridsterItem.$item.y = this.positionYBackup;
         }
         else if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
-            const /** @type {?} */ lastPosition = this.path[this.path.length - 1];
-            let /** @type {?} */ direction = '';
+            /** @type {?} */
+            const lastPosition = this.path[this.path.length - 1];
+            /** @type {?} */
+            let direction = '';
             if (lastPosition.x < this.gridsterItem.$item.x) {
                 direction = this.push.fromWest;
             }
@@ -2381,7 +2738,8 @@ class GridsterDraggable {
      * @return {?}
      */
     toggle() {
-        const /** @type {?} */ enableDrag = this.gridsterItem.canBeDragged();
+        /** @type {?} */
+        const enableDrag = this.gridsterItem.canBeDragged();
         if (!this.enabled && enableDrag) {
             this.enabled = !this.enabled;
             this.dragStartFunction = this.dragStartDelay.bind(this);
@@ -2410,15 +2768,23 @@ class GridsterDraggable {
             this.dragStart(e);
             return;
         }
-        const /** @type {?} */ timeout = setTimeout(() => {
+        /** @type {?} */
+        const timeout = setTimeout(() => {
             this.dragStart(e);
             cancelDrag();
         }, this.gridster.$options.draggable.delayStart);
-        const /** @type {?} */ cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
-        const /** @type {?} */ cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
-        const /** @type {?} */ cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
-        const /** @type {?} */ cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
-        const /** @type {?} */ cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
+        /** @type {?} */
+        const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
+        /** @type {?} */
+        const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseleave', cancelDrag);
+        /** @type {?} */
+        const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
+        /** @type {?} */
+        const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
+        /** @type {?} */
+        const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
+        /** @type {?} */
+        const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
         /**
          * @param {?} eventMove
          * @return {?}
@@ -2436,6 +2802,7 @@ class GridsterDraggable {
             clearTimeout(timeout);
             cancelOnBlur();
             cancelMouse();
+            cancelMouseLeave();
             cancelTouchMove();
             cancelTouchEnd();
             cancelTouchCancel();
@@ -2448,15 +2815,21 @@ class GridsterDraggable {
      * @return {?}
      */
     debounce(func, wait, immediate) {
-        let /** @type {?} */ timeout;
+        /** @type {?} */
+        let timeout;
         return function () {
-            var /** @type {?} */ context = this, /** @type {?} */ args = arguments;
-            var /** @type {?} */ later = function () {
+            /** @type {?} */
+            var context = this;
+            /** @type {?} */
+            var args = arguments;
+            /** @type {?} */
+            var later = function () {
                 timeout = null;
                 if (!immediate)
                     func.apply(context, args);
             };
-            var /** @type {?} */ callNow = immediate && !timeout;
+            /** @type {?} */
+            var callNow = immediate && !timeout;
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
             if (callNow)
@@ -2466,18 +2839,18 @@ class GridsterDraggable {
     ;
 }
 GridsterDraggable.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterDraggable.ctorParameters = () => [
-    { type: GridsterItemComponentInterface, },
-    { type: GridsterComponentInterface, },
-    { type: NgZone, },
+    { type: GridsterItemComponentInterface },
+    { type: GridsterComponentInterface },
+    { type: NgZone }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterPushResize {
     /**
@@ -2522,15 +2895,18 @@ class GridsterPushResize {
      * @return {?}
      */
     restoreItems() {
-        let /** @type {?} */ i = 0;
-        const /** @type {?} */ l = this.pushedItems.length;
-        let /** @type {?} */ pushedItem;
+        /** @type {?} */
+        let i = 0;
+        /** @type {?} */
+        const l = this.pushedItems.length;
+        /** @type {?} */
+        let pushedItem;
         for (; i < l; i++) {
             pushedItem = this.pushedItems[i];
             pushedItem.$item.x = pushedItem.item.x || 0;
             pushedItem.$item.y = pushedItem.item.y || 0;
             pushedItem.$item.cols = pushedItem.item.cols || 1;
-            pushedItem.$item["row"] = pushedItem.item["row"] || 1;
+            pushedItem.$item.row = pushedItem.item.row || 1;
             pushedItem.setSize();
         }
         this.pushedItems = [];
@@ -2540,9 +2916,12 @@ class GridsterPushResize {
      * @return {?}
      */
     setPushedItems() {
-        let /** @type {?} */ i = 0;
-        const /** @type {?} */ l = this.pushedItems.length;
-        let /** @type {?} */ pushedItem;
+        /** @type {?} */
+        let i = 0;
+        /** @type {?} */
+        const l = this.pushedItems.length;
+        /** @type {?} */
+        let pushedItem;
         for (; i < l; i++) {
             pushedItem = this.pushedItems[i];
             pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
@@ -2554,8 +2933,10 @@ class GridsterPushResize {
      * @return {?}
      */
     checkPushBack() {
-        let /** @type {?} */ i = this.pushedItems.length - 1;
-        let /** @type {?} */ change = false;
+        /** @type {?} */
+        let i = this.pushedItems.length - 1;
+        /** @type {?} */
+        let change = false;
         for (; i > -1; i--) {
             if (this.checkPushedItem(this.pushedItems[i], i)) {
                 change = true;
@@ -2566,12 +2947,14 @@ class GridsterPushResize {
         }
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @param {?} direction
      * @return {?}
      */
     push(gridsterItem, direction) {
-        const /** @type {?} */ gridsterItemCollision = this.gridster.checkCollision(gridsterItem.$item);
+        /** @type {?} */
+        const gridsterItemCollision = this.gridster.checkCollision(gridsterItem.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true &&
             gridsterItemCollision !== this.gridsterItem && gridsterItemCollision.canBeResized()) {
             if (this.tryPattern[direction].call(this, gridsterItemCollision, gridsterItem, direction)) {
@@ -2584,14 +2967,17 @@ class GridsterPushResize {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @param {?} direction
      * @return {?}
      */
     trySouth(gridsterItemCollide, gridsterItem, direction) {
-        const /** @type {?} */ backUpY = gridsterItemCollide.$item.y;
-        const /** @type {?} */ backUpRows = gridsterItemCollide.$item.rows;
+        /** @type {?} */
+        const backUpY = gridsterItemCollide.$item.y;
+        /** @type {?} */
+        const backUpRows = gridsterItemCollide.$item.rows;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
         gridsterItemCollide.$item.rows = backUpRows + backUpY - gridsterItemCollide.$item.y;
         if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
@@ -2608,13 +2994,15 @@ class GridsterPushResize {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @param {?} direction
      * @return {?}
      */
     tryNorth(gridsterItemCollide, gridsterItem, direction) {
-        const /** @type {?} */ backUpRows = gridsterItemCollide.$item.rows;
+        /** @type {?} */
+        const backUpRows = gridsterItemCollide.$item.rows;
         gridsterItemCollide.$item.rows = gridsterItem.$item.y - gridsterItemCollide.$item.y;
         if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
             && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
@@ -2629,14 +3017,17 @@ class GridsterPushResize {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @param {?} direction
      * @return {?}
      */
     tryEast(gridsterItemCollide, gridsterItem, direction) {
-        const /** @type {?} */ backUpX = gridsterItemCollide.$item.x;
-        const /** @type {?} */ backUpCols = gridsterItemCollide.$item.cols;
+        /** @type {?} */
+        const backUpX = gridsterItemCollide.$item.x;
+        /** @type {?} */
+        const backUpCols = gridsterItemCollide.$item.cols;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
         gridsterItemCollide.$item.cols = backUpCols + backUpX - gridsterItemCollide.$item.x;
         if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
@@ -2653,13 +3044,15 @@ class GridsterPushResize {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItemCollide
      * @param {?} gridsterItem
      * @param {?} direction
      * @return {?}
      */
     tryWest(gridsterItemCollide, gridsterItem, direction) {
-        const /** @type {?} */ backUpCols = gridsterItemCollide.$item.cols;
+        /** @type {?} */
+        const backUpCols = gridsterItemCollide.$item.cols;
         gridsterItemCollide.$item.cols = gridsterItem.$item.x - gridsterItemCollide.$item.x;
         if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
             && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
@@ -2674,6 +3067,7 @@ class GridsterPushResize {
         return false;
     }
     /**
+     * @private
      * @param {?} gridsterItem
      * @return {?}
      */
@@ -2696,7 +3090,8 @@ class GridsterPushResize {
             ]);
         }
         else {
-            const /** @type {?} */ i = this.pushedItems.indexOf(gridsterItem);
+            /** @type {?} */
+            const i = this.pushedItems.indexOf(gridsterItem);
             this.pushedItemsPath[i].push({
                 x: gridsterItem.$item.x,
                 y: gridsterItem.$item.y,
@@ -2706,6 +3101,7 @@ class GridsterPushResize {
         }
     }
     /**
+     * @private
      * @param {?} i
      * @return {?}
      */
@@ -2716,14 +3112,26 @@ class GridsterPushResize {
         }
     }
     /**
+     * @private
      * @param {?} pushedItem
      * @param {?} i
      * @return {?}
      */
     checkPushedItem(pushedItem, i) {
-        const /** @type {?} */ path = this.pushedItemsPath[i];
-        let /** @type {?} */ j = path.length - 2;
-        let /** @type {?} */ lastPosition, /** @type {?} */ x, /** @type {?} */ y, /** @type {?} */ cols, /** @type {?} */ rows;
+        /** @type {?} */
+        const path = this.pushedItemsPath[i];
+        /** @type {?} */
+        let j = path.length - 2;
+        /** @type {?} */
+        let lastPosition;
+        /** @type {?} */
+        let x;
+        /** @type {?} */
+        let y;
+        /** @type {?} */
+        let cols;
+        /** @type {?} */
+        let rows;
         for (; j > -1; j--) {
             lastPosition = path[j];
             x = pushedItem.$item.x;
@@ -2753,16 +3161,16 @@ class GridsterPushResize {
     }
 }
 GridsterPushResize.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterPushResize.ctorParameters = () => [
-    { type: GridsterItemComponentInterface, },
+    { type: GridsterItemComponentInterface }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterResizable {
     /**
@@ -2785,7 +3193,6 @@ class GridsterResizable {
      * @return {?}
      */
     destroy() {
-        delete this.gridster.movingItem;
         if (this.gridster.previewStyle) {
             this.gridster.previewStyle();
         }
@@ -2818,6 +3225,7 @@ class GridsterResizable {
             this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
         });
         this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
+        this.mouseleave = this.gridsterItem.renderer.listen('document', 'mouseleave', this.dragStopFunction);
         this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
         this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
         this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
@@ -2916,6 +3324,7 @@ class GridsterResizable {
         cancelScroll();
         this.mousemove();
         this.mouseup();
+        this.mouseleave();
         this.cancelOnBlur();
         this.touchmove();
         this.touchend();
@@ -3156,15 +3565,23 @@ class GridsterResizable {
             this.dragStart(e);
             return;
         }
-        const /** @type {?} */ timeout = setTimeout(() => {
+        /** @type {?} */
+        const timeout = setTimeout(() => {
             this.dragStart(e);
             cancelDrag();
         }, this.gridster.$options.resizable.delayStart);
-        const /** @type {?} */ cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
-        const /** @type {?} */ cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
-        const /** @type {?} */ cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
-        const /** @type {?} */ cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
-        const /** @type {?} */ cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
+        /** @type {?} */
+        const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
+        /** @type {?} */
+        const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseleave', cancelDrag);
+        /** @type {?} */
+        const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
+        /** @type {?} */
+        const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
+        /** @type {?} */
+        const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
+        /** @type {?} */
+        const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
         /**
          * @param {?} eventMove
          * @return {?}
@@ -3182,6 +3599,7 @@ class GridsterResizable {
             clearTimeout(timeout);
             cancelOnBlur();
             cancelMouse();
+            cancelMouseLeave();
             cancelTouchMove();
             cancelTouchEnd();
             cancelTouchCancel();
@@ -3192,16 +3610,14 @@ class GridsterResizable {
      * @return {?}
      */
     setItemTop(top) {
-        const /** @type {?} */ transform = 'translate(' + this.left + 'px, ' + top + 'px)';
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+        this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, top);
     }
     /**
      * @param {?} left
      * @return {?}
      */
     setItemLeft(left) {
-        const /** @type {?} */ transform = 'translate(' + left + 'px, ' + this.top + 'px)';
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+        this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, left, this.top);
     }
     /**
      * @param {?} height
@@ -3219,18 +3635,18 @@ class GridsterResizable {
     }
 }
 GridsterResizable.decorators = [
-    { type: Injectable },
+    { type: Injectable }
 ];
 /** @nocollapse */
 GridsterResizable.ctorParameters = () => [
-    { type: GridsterItemComponentInterface, },
-    { type: GridsterComponentInterface, },
-    { type: NgZone, },
+    { type: GridsterItemComponentInterface },
+    { type: GridsterComponentInterface },
+    { type: NgZone }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterItemComponent {
     /**
@@ -3304,10 +3720,14 @@ class GridsterItemComponent {
      * @return {?}
      */
     updateItemSize() {
-        const /** @type {?} */ top = this.$item.y * this.gridster.curRowHeight;
-        const /** @type {?} */ left = this.$item.x * this.gridster.curColWidth;
-        const /** @type {?} */ width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
-        const /** @type {?} */ height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
+        /** @type {?} */
+        const top = this.$item.y * this.gridster.curRowHeight;
+        /** @type {?} */
+        const left = this.$item.x * this.gridster.curColWidth;
+        /** @type {?} */
+        const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
+        /** @type {?} */
+        const height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
         if (!this.init && width > 0 && height > 0) {
             this.init = true;
             if (this.item.initCallback) {
@@ -3391,50 +3811,25 @@ class GridsterItemComponent {
 GridsterItemComponent.decorators = [
     { type: Component, args: [{
                 selector: 'gridster-item',
-                template: `<ng-content></ng-content>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.s || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-s"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.e || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-e"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.n || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-n"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.w || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-w"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.se || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-se"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.ne || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-ne"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.sw || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-sw"></div>
-<div (mousedown)="resize.dragStartDelay($event)" (touchstart)="resize.dragStartDelay($event)"
-     [hidden]="!gridster.$options.resizable.handles.nw || !resize.resizeEnabled"
-     class="gridster-item-resizable-handler handle-nw"></div>
-`,
-                styles: [`gridster-item{box-sizing:border-box;z-index:1;position:absolute;overflow:hidden;transition:.3s;display:none;background:#fff;-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}gridster-item.gridster-item-moving{cursor:move}gridster-item.gridster-item-moving,gridster-item.gridster-item-resizing{transition:0s;z-index:2;box-shadow:0 0 5px 5px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.gridster-item-resizable-handler{position:absolute;z-index:2}.gridster-item-resizable-handler.handle-n{cursor:n-resize;height:10px;right:0;top:0;left:0}.gridster-item-resizable-handler.handle-e{cursor:e-resize;width:10px;bottom:0;right:0;top:0}.gridster-item-resizable-handler.handle-s{cursor:s-resize;height:10px;right:0;bottom:0;left:0}.gridster-item-resizable-handler.handle-w{cursor:w-resize;width:10px;left:0;top:0;bottom:0}.gridster-item-resizable-handler.handle-ne{cursor:ne-resize;width:10px;height:10px;right:0;top:0}.gridster-item-resizable-handler.handle-nw{cursor:nw-resize;width:10px;height:10px;left:0;top:0}.gridster-item-resizable-handler.handle-se{cursor:se-resize;width:0;height:0;right:0;bottom:0;border-style:solid;border-width:0 0 10px 10px;border-color:transparent}.gridster-item-resizable-handler.handle-sw{cursor:sw-resize;width:10px;height:10px;left:0;bottom:0}gridster-item:hover .gridster-item-resizable-handler.handle-se{border-color:transparent transparent #ccc}`],
-                encapsulation: ViewEncapsulation.None
-            },] },
+                template: "<ng-content></ng-content>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.s || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-s\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.e || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-e\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.n || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-n\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.w || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-w\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.se || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-se\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.ne || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-ne\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.sw || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-sw\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     [hidden]=\"!gridster.$options.resizable.handles.nw || !resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-nw\"></div>\n",
+                encapsulation: ViewEncapsulation.None,
+                styles: ["gridster-item{box-sizing:border-box;z-index:1;position:absolute;overflow:hidden;transition:.3s;display:none;background:#fff;-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}gridster-item.gridster-item-moving{cursor:move}gridster-item.gridster-item-moving,gridster-item.gridster-item-resizing{transition:none;z-index:2;box-shadow:0 0 5px 5px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.gridster-item-resizable-handler{position:absolute;z-index:2}.gridster-item-resizable-handler.handle-n{cursor:n-resize;height:10px;right:0;top:0;left:0}.gridster-item-resizable-handler.handle-e{cursor:e-resize;width:10px;bottom:0;right:0;top:0}.gridster-item-resizable-handler.handle-s{cursor:s-resize;height:10px;right:0;bottom:0;left:0}.gridster-item-resizable-handler.handle-w{cursor:w-resize;width:10px;left:0;top:0;bottom:0}.gridster-item-resizable-handler.handle-ne{cursor:ne-resize;width:10px;height:10px;right:0;top:0}.gridster-item-resizable-handler.handle-nw{cursor:nw-resize;width:10px;height:10px;left:0;top:0}.gridster-item-resizable-handler.handle-se{cursor:se-resize;width:0;height:0;right:0;bottom:0;border-style:solid;border-width:0 0 10px 10px;border-color:transparent}.gridster-item-resizable-handler.handle-sw{cursor:sw-resize;width:10px;height:10px;left:0;bottom:0}gridster-item:hover .gridster-item-resizable-handler.handle-se{border-color:transparent transparent #ccc}"]
+            }] }
 ];
 /** @nocollapse */
 GridsterItemComponent.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: GridsterComponent, decorators: [{ type: Host },] },
-    { type: Renderer2, },
-    { type: NgZone, },
+    { type: ElementRef },
+    { type: GridsterComponent, decorators: [{ type: Host }] },
+    { type: Renderer2 },
+    { type: NgZone }
 ];
 GridsterItemComponent.propDecorators = {
-    "item": [{ type: Input },],
+    item: [{ type: Input }]
 };
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterPreviewComponent {
     /**
@@ -3477,20 +3872,20 @@ GridsterPreviewComponent.decorators = [
     { type: Component, args: [{
                 selector: 'gridster-preview',
                 template: '',
-                styles: [`gridster-preview{display:none;background:rgba(0,0,0,.15)}`],
-                encapsulation: ViewEncapsulation.None
-            },] },
+                encapsulation: ViewEncapsulation.None,
+                styles: ["gridster-preview{position:absolute;display:none;background:rgba(0,0,0,.15)}"]
+            }] }
 ];
 /** @nocollapse */
 GridsterPreviewComponent.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: GridsterComponent, decorators: [{ type: Host },] },
-    { type: Renderer2, },
+    { type: ElementRef },
+    { type: GridsterComponent, decorators: [{ type: Host }] },
+    { type: Renderer2 }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GridsterModule {
 }
@@ -3507,18 +3902,19 @@ GridsterModule.decorators = [
                 exports: [GridsterComponent, GridsterItemComponent],
                 providers: [],
                 bootstrap: []
-            },] },
+            },] }
 ];
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { GridsterComponent, GridsterItemComponent, GridsterItemComponentInterface, GridsterComponentInterface, GridType, DisplayGrid, CompactType, GridsterConfigService, GridsterModule, GridsterPush, GridsterPushResize, GridsterSwap, GridsterPreviewComponent as ɵa };
+
 //# sourceMappingURL=angular-gridster2.js.map

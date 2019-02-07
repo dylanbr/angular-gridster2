@@ -15,12 +15,12 @@ export declare class GridsterPushResize {
     restoreItems(): void;
     setPushedItems(): void;
     checkPushBack(): void;
-    private push(gridsterItem, direction);
-    private trySouth(gridsterItemCollide, gridsterItem, direction);
-    private tryNorth(gridsterItemCollide, gridsterItem, direction);
-    private tryEast(gridsterItemCollide, gridsterItem, direction);
-    private tryWest(gridsterItemCollide, gridsterItem, direction);
-    private addToPushed(gridsterItem);
-    private removeFromPushed(i);
-    private checkPushedItem(pushedItem, i);
+    private push;
+    private trySouth;
+    private tryNorth;
+    private tryEast;
+    private tryWest;
+    private addToPushed;
+    private removeFromPushed;
+    private checkPushedItem;
 }

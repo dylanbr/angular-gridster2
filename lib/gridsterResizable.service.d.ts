@@ -20,6 +20,7 @@ export declare class GridsterResizable {
     resizeEnabled: boolean;
     mousemove: Function;
     mouseup: Function;
+    mouseleave: Function;
     cancelOnBlur: Function;
     touchmove: Function;
     touchend: Function;

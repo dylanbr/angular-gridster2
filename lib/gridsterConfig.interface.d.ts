@@ -3,19 +3,19 @@ import { GridsterItemComponentInterface } from './gridsterItemComponent.interfac
 import { GridsterComponentInterface } from './gridster.interface';
 export declare type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export declare type displayGrids = 'always' | 'onDrag&Resize' | 'none';
-export declare type compactTypes = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
+export declare type compactTypes = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up' | 'compactRight' | 'compactUp&Right' | 'compactRight&Up';
 export declare enum GridType {
     Fit = "fit",
     ScrollVertical = "scrollVertical",
     ScrollHorizontal = "scrollHorizontal",
     Fixed = "fixed",
     VerticalFixed = "verticalFixed",
-    HorizontalFixed = "horizontalFixed",
+    HorizontalFixed = "horizontalFixed"
 }
 export declare enum DisplayGrid {
     Always = "always",
     OnDragAndResize = "onDrag&Resize",
-    None = "none",
+    None = "none"
 }
 export declare enum CompactType {
     None = "none",
@@ -23,6 +23,9 @@ export declare enum CompactType {
     CompactLeft = "compactLeft",
     CompactUpAndLeft = "compactUp&Left",
     CompactLeftAndUp = "compactLeft&Up",
+    CompactRight = "compactRight",
+    CompactUpAndRight = "compactUp&Right",
+    CompactRightAndUp = "compactRight&Up"
 }
 export interface GridsterConfig {
     gridType?: gridTypes;
@@ -51,6 +54,7 @@ export interface GridsterConfig {
     outerMarginRight?: number | null;
     outerMarginBottom?: number | null;
     outerMarginLeft?: number | null;
+    useTransformPositioning?: boolean;
     scrollSensitivity?: number | null;
     scrollSpeed?: number;
     initCallback?: (gridster: GridsterComponentInterface) => void;
