@@ -68,9 +68,15 @@ export class GridsterCompact {
       }
       moved = this.moveUpTillCollision(widget.$item);
       if (moved) {
+        let oldItem = {
+          x: widget.item.x,
+          y: widget.item.y,
+          rows: widget.item.rows,
+          cols: widget.item.cols
+        };
         widgetMovedUp = true;
         widget.item.y = widget.$item.y;
-        widget.itemChanged();
+        widget.itemChanged(oldItem);
       }
     }
     if (widgetMovedUp) {
@@ -99,9 +105,15 @@ export class GridsterCompact {
       }
       moved = this.moveLeftTillCollision(widget.$item);
       if (moved) {
+        let oldItem = {
+          x: widget.item.x,
+          y: widget.item.y,
+          rows: widget.item.rows,
+          cols: widget.item.cols
+        };
         widgetMovedUp = true;
         widget.item.x = widget.$item.x;
-        widget.itemChanged();
+        widget.itemChanged(oldItem);
       }
     }
     if (widgetMovedUp) {
@@ -119,9 +131,15 @@ export class GridsterCompact {
       }
       moved = this.moveRightTillCollision(widget.$item);
       if (moved) {
+        let oldItem = {
+          x: widget.item.x,
+          y: widget.item.y,
+          rows: widget.item.rows,
+          cols: widget.item.cols
+        };
         widgetMovedUp = true;
         widget.item.x = widget.$item.x;
-        widget.itemChanged();
+        widget.itemChanged(oldItem);
       }
     }
     if (widgetMovedUp) {

@@ -108,9 +108,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.left = left;
   }
 
-  itemChanged(): void {
+  itemChanged(oldItem: GridsterItem): void {
     if (this.gridster.options.itemChangeCallback) {
-      this.gridster.options.itemChangeCallback(this.item, this);
+      this.gridster.options.itemChangeCallback(this.item, this, oldItem);
     }
   }
 
@@ -125,12 +125,18 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       this.$item.rows = oldValue.rows || 1;
       this.setSize();
     } else {
+      let oldItem = {
+        x: oldValue.x,
+        y: oldValue.y,
+        rows: oldValue.rows,
+        cols: oldValue.cols
+      };
       this.item.cols = this.$item.cols;
       this.item.rows = this.$item.rows;
       this.item.x = this.$item.x;
       this.item.y = this.$item.y;
       this.gridster.calculateLayoutDebounce();
-      this.itemChanged();
+      this.itemChanged(oldItem);
     }
   }
 

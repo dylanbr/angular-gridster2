@@ -307,12 +307,12 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     if (itemComponent.$item.cols === undefined) {
       itemComponent.$item.cols = this.$options.defaultItemCols;
       itemComponent.item.cols = itemComponent.$item.cols;
-      itemComponent.itemChanged();
+      itemComponent.itemChanged(itemComponent.item);
     }
     if (itemComponent.$item.rows === undefined) {
       itemComponent.$item.rows = this.$options.defaultItemRows;
       itemComponent.item.rows = itemComponent.$item.rows;
-      itemComponent.itemChanged();
+      itemComponent.itemChanged(itemComponent.item);
     }
     if (itemComponent.$item.x === -1 || itemComponent.$item.y === -1) {
       this.autoPositionItem(itemComponent);
@@ -400,10 +400,16 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
     if (this.getNextPossiblePosition(itemComponent.$item)) {
+      let oldItem = {
+        x: itemComponent.item.x,
+        y: itemComponent.item.y,
+        rows: itemComponent.item.rows,
+        cols: itemComponent.item.cols
+      };
       itemComponent.notPlaced = false;
       itemComponent.item.x = itemComponent.$item.x;
       itemComponent.item.y = itemComponent.$item.y;
-      itemComponent.itemChanged();
+      itemComponent.itemChanged(oldItem);
     } else {
       itemComponent.notPlaced = true;
       if (!this.$options.disableWarnings) {
