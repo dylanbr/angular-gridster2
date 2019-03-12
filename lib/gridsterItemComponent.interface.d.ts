@@ -14,7 +14,7 @@ export declare abstract class GridsterItemComponentInterface {
     resize: GridsterResizable;
     notPlaced: boolean;
     updateOptions: () => void;
-    itemChanged: () => void;
+    itemChanged: (oldItem: GridsterItem) => void;
     setSize: () => void;
     checkItemChanges: (newValue: GridsterItem, oldValue: GridsterItem) => void;
     canBeDragged: () => boolean;

@@ -25,7 +25,7 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy, Gridste
     ngOnDestroy(): void;
     setSize(): void;
     updateItemSize(): void;
-    itemChanged(): void;
+    itemChanged(oldItem: GridsterItem): void;
     checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void;
     canBeDragged(): boolean;
     dragLimit(): boolean | string;
