@@ -1,6 +1,6 @@
+import { Injectable, Component, ViewEncapsulation, ElementRef, Renderer2, ChangeDetectorRef, NgZone, Input, Host, NgModule } from '@angular/core';
 import { __assign } from 'tslib';
 import { CommonModule } from '@angular/common';
-import { Injectable, ChangeDetectorRef, Component, ElementRef, Input, NgZone, Renderer2, ViewEncapsulation, Host, NgModule } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -208,6 +208,10 @@ var GridsterConfigService = {
     // disable console log warnings about misplacement of grid items
     scrollToNewItems: false,
     // scroll to new items placed in a scrollable view
+    disableScrollHorizontal: false,
+    // disable horizontal scrolling
+    disableScrollVertical: false,
+    // disable vertical scrolling
     disableAutoPositionOnConflict: false // disable auto-position of items on conflict state
 };
 
@@ -1441,10 +1445,10 @@ var GridsterComponent = /** @class */ (function () {
         if (this.windowResize) {
             this.windowResize();
         }
-        if (this.options.destroyCallback) {
+        if (this.options && this.options.destroyCallback) {
             this.options.destroyCallback(this);
         }
-        if (this.options.api) {
+        if (this.options && this.options.api) {
             this.options.api.resize = undefined;
             this.options.api.optionsChanged = undefined;
             this.options.api.getNextPossiblePosition = undefined;
@@ -2238,43 +2242,47 @@ function scroll(gridster, left, top, width, height, e, lastMouse, calculateItemP
     var elemTopOffset = top - offsetTop;
     /** @type {?} */
     var elemBottomOffset = offsetHeight + offsetTop - top - height;
-    if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
-        cancelN();
-        if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
-            return;
+    if (!gridster.$options.disableScrollVertical) {
+        if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
+            cancelN();
+            if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
+                return;
+            }
+            intervalS = startVertical(1, calculateItemPosition, lastMouse);
         }
-        intervalS = startVertical(1, calculateItemPosition, lastMouse);
-    }
-    else if (lastMouse.clientY > e.clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
-        cancelS();
-        if ((resizeEvent && resizeEventType && !resizeEventType.n) || intervalN) {
-            return;
+        else if (lastMouse.clientY > e.clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
+            cancelS();
+            if ((resizeEvent && resizeEventType && !resizeEventType.n) || intervalN) {
+                return;
+            }
+            intervalN = startVertical(-1, calculateItemPosition, lastMouse);
         }
-        intervalN = startVertical(-1, calculateItemPosition, lastMouse);
-    }
-    else if (lastMouse.clientY !== e.clientY) {
-        cancelVertical();
+        else if (lastMouse.clientY !== e.clientY) {
+            cancelVertical();
+        }
     }
     /** @type {?} */
     var elemRightOffset = offsetLeft + offsetWidth - left - width;
     /** @type {?} */
     var elemLeftOffset = left - offsetLeft;
-    if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
-        cancelW();
-        if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
-            return;
+    if (!gridster.$options.disableScrollHorizontal) {
+        if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
+            cancelW();
+            if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
+                return;
+            }
+            intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
         }
-        intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
-    }
-    else if (lastMouse.clientX > e.clientX && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
-        cancelE();
-        if ((resizeEvent && resizeEventType && !resizeEventType.w) || intervalW) {
-            return;
+        else if (lastMouse.clientX > e.clientX && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
+            cancelE();
+            if ((resizeEvent && resizeEventType && !resizeEventType.w) || intervalW) {
+                return;
+            }
+            intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
         }
-        intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
-    }
-    else if (lastMouse.clientX !== e.clientX) {
-        cancelHorizontal();
+        else if (lastMouse.clientX !== e.clientX) {
+            cancelHorizontal();
+        }
     }
 }
 /**
@@ -4592,6 +4600,5 @@ var GridsterModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { GridsterComponent, GridsterItemComponent, GridsterItemComponentInterface, GridsterComponentInterface, GridType, DisplayGrid, CompactType, GridsterConfigService, GridsterModule, GridsterPush, GridsterPushResize, GridsterSwap, GridsterPreviewComponent as ɵa };
-
+export { CompactType, DisplayGrid, GridType, GridsterComponent, GridsterComponentInterface, GridsterConfigService, GridsterItemComponent, GridsterItemComponentInterface, GridsterModule, GridsterPush, GridsterPushResize, GridsterSwap, GridsterPreviewComponent as ɵa };
 //# sourceMappingURL=angular-gridster2.js.map
